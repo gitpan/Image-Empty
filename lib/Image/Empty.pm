@@ -6,15 +6,15 @@ use warnings;
 
 =head1 NAME
 
-Image::Empty - Empty/transparent images for tracking URLs.
+Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 $VERSION = eval $VERSION;
 
@@ -108,6 +108,8 @@ sub gif
 
 =head3 render
 
+=head4 CGI
+
  my $gif = Image::Empty->gif;
  
  print $gif->render( CGI->new );
@@ -118,11 +120,22 @@ It is the same as doing:
 
  my $gif = Image::Empty->gif;
  
- print CGI->new->header( -type => $gif->type, -Content_length => $gif->length );
+ print CGI->new->header( -type => $gif->type, -Content_length => $gif->length, -Content_disposition => $gif->disposition . '; filename="' . $gif->filename . '"' );
  
  print $gif->content;
 
-Currently only CGI is supported.
+=head4 Plack::Response
+
+ my $app = sub {
+ 
+         my $response = Plack::Response->new;
+ 
+         my $gif = Image::Empty->gif;
+ 
+         return $gif->render( $response );
+ }
+
+This approach calls C<finalize> on the response object for you and returns it, so you just need to return it from your app subroutine.
 
 =cut
 
@@ -138,6 +151,20 @@ sub render
 		     . $self->content;
 	}
 
+	if ( ref $handler eq 'Plack::Response' )
+	{
+		$handler->status(200);
+	
+		$handler->content_type(   $self->type   );
+		$handler->content_length( $self->length );
+	
+		$handler->header( 'Content-disposition' => $self->disposition . '; filename="' . $self->filename . '"' );
+
+		$handler->body( $self->content );
+		
+		return $handler->finalize;
+	}
+	
 	return '';
 }
 
@@ -201,4 +228,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1; # End of Image::Empty
+1;
