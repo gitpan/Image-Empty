@@ -10,17 +10,17 @@ Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
 
 =head1 VERSION
 
-Version 0.03
+Version 0.04
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Creates simple 1x1 pixel empty/transparent GIFs to use in tracking URLs.
+Create 1x1 pixel empty/transparent GIFs to use in tracking URLs.
 
  my $empty_gif = Image::Empty->gif;
  
@@ -132,7 +132,10 @@ It is the same as doing:
 
  my $gif = Image::Empty->gif;
  
- print CGI->new->header( -type => $gif->type, -Content_length => $gif->length, -Content_disposition => $gif->disposition . '; filename="' . $gif->filename . '"' );
+ print CGI->new->header( -type                => $gif->type,
+                         -Content_length      => $gif->length,
+                         -Content_disposition => $gif->disposition . '; filename="' . $gif->filename . '"',
+                       );
  
  print $gif->content;
 
