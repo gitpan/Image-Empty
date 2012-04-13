@@ -4,5 +4,7 @@ Revision history for Image-Empty
         First version
         
 0.02    Tests, and added support for Plack::Response
+
+0.03    Condensing and chaining methods
         
 

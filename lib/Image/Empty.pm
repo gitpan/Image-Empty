@@ -10,11 +10,11 @@ Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 $VERSION = eval $VERSION;
 
@@ -27,6 +27,18 @@ Creates simple 1x1 pixel empty/transparent GIFs to use in tracking URLs.
  print CGI->new->header( -type => $empty_gif->type, -Content_length => $empty_gif->length );
  
  print $empty_gif->content;
+
+Or
+
+ my $gif = Image::Empty->gif;
+ 
+ $gif->render( CGI->new );
+
+Or, if running under Plack
+
+ my $gif = Image::Empty->gif;
+ 
+ return $gif->render( Plack::Response->new );
 
 =cut
 
@@ -86,9 +98,9 @@ Returns the image data to send in the HTTP response body.
 
 =head3 gif
 
- Image::Empty->gif;
+ my $gif = Image::Empty->gif;
 
-Returns an instance of an empty GIF.
+Returns an instance representing an empty GIF for use in responding to HTTP requests.
 
 =cut
 
@@ -110,11 +122,11 @@ sub gif
 
 =head4 CGI
 
- my $gif = Image::Empty->gif;
- 
- print $gif->render( CGI->new );
+To be lazy, you can supply a CGI object to the C<render> method to have the HTTP header and content set for you.
 
-Returns the output of setting the HTTP header and content.
+A string is returned for you to print, so you can condense this down to a single line by chaining methods.
+
+ print Image::Empty->gif->render( CGI->new );
 
 It is the same as doing:
 
@@ -126,16 +138,14 @@ It is the same as doing:
 
 =head4 Plack::Response
 
- my $app = sub {
- 
-         my $response = Plack::Response->new;
- 
-         my $gif = Image::Empty->gif;
- 
-         return $gif->render( $response );
- }
+If you are working under Plack, this module supports that too.
 
-This approach calls C<finalize> on the response object for you and returns it, so you just need to return it from your app subroutine.
+Unlike the C<CGI> approach above, this scenario returns the C<finalized> L<Plack::Response> object.
+
+ my $app = sub {
+
+         return Image::Empty->gif->render( Plack::Response->new );
+ }
 
 =cut
 
