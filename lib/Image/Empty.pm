@@ -10,11 +10,11 @@ Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 $VERSION = eval $VERSION;
 
@@ -22,11 +22,11 @@ $VERSION = eval $VERSION;
 
 Create 1x1 pixel empty/transparent GIFs to use in tracking URLs.
 
- my $empty_gif = Image::Empty->gif;
+ my $gif = Image::Empty->gif;
  
- print CGI->new->header( -type => $empty_gif->type, -Content_length => $empty_gif->length );
+ print CGI->new->header( -type => $gif->type, -Content_length => $gif->length );
  
- print $empty_gif->content;
+ print $gif->content;
 
 Or
 
@@ -56,7 +56,7 @@ has content     => ( is => 'rw',              );
 
 =head3 type
 
- $empty_image->type;
+ $gif->type;
 
 Returns the mime/type of the image for use in HTTP headers.
 
@@ -64,7 +64,7 @@ Returns the mime/type of the image for use in HTTP headers.
 
 =head3 length
 
- $empty_image->length;
+ $gif->length;
 
 Returns the content length for use in HTTP headers.
 
@@ -72,7 +72,7 @@ Returns the content length for use in HTTP headers.
 
 =head3 disposition
 
- $empty_image->disposition;
+ $gif->disposition;
 
 Returns the content disposition for use in HTTP headers.
 
@@ -80,7 +80,7 @@ Returns the content disposition for use in HTTP headers.
 
 =head3 filename
 
- $empty_image->filename;
+ $gif->filename;
 
 Returns the content filename for use in HTTP headers.
 
@@ -88,7 +88,7 @@ Returns the content filename for use in HTTP headers.
 
 =head3 content
 
- $empty_image->content;
+ $gif->content;
 
 Returns the image data to send in the HTTP response body.
 
@@ -194,8 +194,9 @@ sub render
 
 =head1 TODO
 
-* PNG support
-* Catalyst support
+PNG support
+
+Catalyst support
 
 
 =head1 AUTHOR
