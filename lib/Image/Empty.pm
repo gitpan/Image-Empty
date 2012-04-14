@@ -10,11 +10,11 @@ Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 $VERSION = eval $VERSION;
 
@@ -42,59 +42,31 @@ Or, if running under Plack
 
 =cut
 
-use Moose;
-
-has type        => ( is => 'rw', isa => 'Str' );
-has length      => ( is => 'rw', isa => 'Int' );
-has disposition => ( is => 'rw', isa => 'Str' );
-has filename    => ( is => 'rw', isa => 'Str' );
-has content     => ( is => 'rw',              );
-
 =head1 METHODS
 
-=head2 Attributes
-
-=head3 type
-
- $gif->type;
-
-Returns the mime/type of the image for use in HTTP headers.
-
-=cut
-
-=head3 length
-
- $gif->length;
-
-Returns the content length for use in HTTP headers.
-
-=cut
-
-=head3 disposition
-
- $gif->disposition;
-
-Returns the content disposition for use in HTTP headers.
-
-=cut
-
-=head3 filename
-
- $gif->filename;
-
-Returns the content filename for use in HTTP headers.
-
-=cut
-
-=head3 content
-
- $gif->content;
-
-Returns the image data to send in the HTTP response body.
-
-=cut
-
 =head2 Class Methods
+
+=head3 new
+
+Returns an instance of the class;
+
+=cut
+
+sub new
+{
+	my ( $class, %args ) = @_;
+	
+	my $self = { type        => $args{ type },
+	             length      => $args{ length },
+	             disposition => $args{ disposition },
+	             filename    => $args{ filename },
+	             content     => $args{ content },
+	           };
+	
+	bless( $self, $class );
+	
+	return $self;
+}
 
 =head3 gif
 
@@ -191,6 +163,94 @@ sub render
 	
 	return '';
 }
+
+
+=head2 Attributes
+
+=head3 type
+
+ $gif->type;
+
+Returns the mime/type of the image for use in HTTP headers.
+
+=cut
+
+sub type
+{
+	my ( $self, $arg ) = @_;
+	$self->{ type } = $arg if defined $arg;
+	return $self->{ type };
+}
+
+=head3 length
+
+ $gif->length;
+
+Returns the content length for use in HTTP headers.
+
+=cut
+
+sub length
+{
+	my ( $self, $arg ) = @_;
+	$self->{ length } = $arg if defined $arg;
+	return $self->{ length };
+}
+
+=head3 disposition
+
+ $gif->disposition;
+
+Returns the content disposition for use in HTTP headers.
+
+=cut
+
+sub disposition
+{
+	my ( $self, $arg ) = @_;
+	$self->{ disposition } = $arg if defined $arg;
+	return $self->{ disposition };
+}
+
+=head3 filename
+
+ $gif->filename;
+
+Returns the content filename for use in HTTP headers.
+
+=cut
+
+sub filename
+{
+	my ( $self, $arg ) = @_;
+	$self->{ filename } = $arg if defined $arg;
+	return $self->{ filename };
+}
+
+=head3 content
+
+ $gif->content;
+
+Returns the image data to send in the HTTP response body.
+
+=cut
+
+sub content
+{
+	my ( $self, $arg ) = @_;
+	$self->{ content } = $arg if defined $arg;
+	return $self->{ content };
+}
+
+
+
+
+
+
+
+
+
+
 
 =head1 TODO
 
