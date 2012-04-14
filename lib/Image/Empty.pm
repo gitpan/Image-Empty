@@ -10,11 +10,11 @@ Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 $VERSION = eval $VERSION;
 
@@ -122,9 +122,9 @@ sub gif
 
 =head4 CGI
 
-To be lazy, you can supply a CGI object to the C<render> method to have the HTTP header and content set for you.
+You can supply a C<CGI> object to the C<render> method to have the HTTP header and content set for you.
 
-A string is returned for you to print, so you can condense this down to a single line by chaining methods.
+A string is returned for you to print, you can condense this down to a single line by chaining methods.
 
  print Image::Empty->gif->render( CGI->new );
 
@@ -143,11 +143,22 @@ It is the same as doing:
 
 If you are working under Plack, this module supports that too.
 
-Unlike the C<CGI> approach above, this scenario returns the C<finalized> L<Plack::Response> object.
+This scenario returns the C<finalized> L<Plack::Response> object, as a quick one-liner...
 
  my $app = sub {
 
          return Image::Empty->gif->render( Plack::Response->new );
+ }
+
+It is the same as doing:
+
+ my $app = sub {
+ 
+         my $gif = Image::Empty->gif;
+ 
+         my $response = Plack::Response->new;
+         
+         return $gif->render( $response );
  }
 
 =cut
@@ -180,6 +191,12 @@ sub render
 	
 	return '';
 }
+
+=head1 TODO
+
+* PNG support
+* Catalyst support
+
 
 =head1 AUTHOR
 
