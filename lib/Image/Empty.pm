@@ -6,21 +6,21 @@ use warnings;
 
 =head1 NAME
 
-Image::Empty - Hassle-free 1x1 pixel empty GIFs for tracking URLs.
+Image::Empty - Hassle-free 1x1 transparent GIFs for tracking URLs.
 
 =head1 VERSION
 
-Version 0.13
+Version 0.14
 
 =cut
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Create 1x1 pixel empty/transparent GIFs to use in tracking URLs without the hassle of actually creating and/or loading image data.
+Create 1x1 transparent GIFs to use in tracking URLs without the hassle of actually creating and/or loading image data.
 
 Such a basic and common scenario deserves a basic solution.
 
@@ -84,27 +84,27 @@ sub gif
 
 =head3 render
 
-The C<render> method can be used to set the HTTP headers and body when responding with the empty GIF.
+The C<render> method is be used to set the HTTP headers and body.
 
  $gif->render;
 
-A string is returned.
+With no arguments, returns a string.
 
 Under a CGI environment this would generally be printed directly to C<STDOUT> (ie, the browser).
 
-Chaining methods together can make the usage very compact.
+Chaining methods together can give very concise and compact code.
 
  use Image::Empty;
  
  print Image::Empty->gif->render;
 
-Remember that the C<render> method sets the HTTP headers for you, so you do not need to worry about this yourself.
+Remember that the C<render> method returns the HTTP headers.  The above 2 lines are all you need in a script.
 
 =head4 Plack
 
 If you are working with Plack, supply the L<Plack::Response> object to the C<render> method.
 
-The C<render> method in this scenario returns the C<finalized> L<Plack::Response> object.
+The C<finalized> L<Plack::Response> object is returned.
 
 As a quick one-liner...
 
