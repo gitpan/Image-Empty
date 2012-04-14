@@ -10,11 +10,11 @@ Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 $VERSION = eval $VERSION;
 
@@ -28,13 +28,13 @@ Create 1x1 pixel empty/transparent GIFs to use in tracking URLs.
  
  print $gif->content;
 
-Or
+Or...
 
  my $gif = Image::Empty->gif;
  
  $gif->render( CGI->new );
 
-Or, if running under Plack
+Or, if you are working with Plack...
 
  my $gif = Image::Empty->gif;
  
@@ -48,7 +48,9 @@ Or, if running under Plack
 
 =head3 new
 
-Returns an instance of the class;
+Returns an instance representing an empty image.
+
+ my $empty = Image::Empty->new;
 
 =cut
 
@@ -70,9 +72,9 @@ sub new
 
 =head3 gif
 
- my $gif = Image::Empty->gif;
-
 Returns an instance representing an empty GIF for use in responding to HTTP requests.
+
+ my $gif = Image::Empty->gif;
 
 =cut
 
@@ -94,7 +96,7 @@ sub gif
 
 =head4 CGI
 
-You can supply a C<CGI> object to the C<render> method to have the HTTP header and content set for you.
+Supplying a C<CGI> object to the C<render> method will set the HTTP header and content.
 
 A string is returned for you to print, you can condense this down to a single line by chaining methods.
 
@@ -111,7 +113,7 @@ It is the same as doing:
  
  print $gif->content;
 
-=head4 Plack::Response
+=head4 Plack
 
 If you are working under Plack, this module supports that too.
 
@@ -163,7 +165,6 @@ sub render
 	
 	return '';
 }
-
 
 =head2 Attributes
 
@@ -241,16 +242,6 @@ sub content
 	$self->{ content } = $arg if defined $arg;
 	return $self->{ content };
 }
-
-
-
-
-
-
-
-
-
-
 
 =head1 TODO
 
