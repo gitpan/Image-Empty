@@ -6,22 +6,24 @@ use warnings;
 
 =head1 NAME
 
-Image::Empty - Empty/transparent 1x1 pixel images for use in tracking URLs.
+Image::Empty - Hassle-free empty/transparent 1x1 pixel images for tracking URLs.
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Create 1x1 pixel empty/transparent GIFs to use in tracking URLs.
+Create 1x1 pixel empty/transparent GIFs to use in tracking URLs without the hassle of actually creating images.
 
+ use Image::Empty;
+ 
  my $gif = Image::Empty->gif;
  
  print CGI->new->header( -type => $gif->type, -Content_length => $gif->length );
