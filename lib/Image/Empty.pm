@@ -6,15 +6,15 @@ use warnings;
 
 =head1 NAME
 
-Image::Empty - Hassle-free empty/transparent 1x1 pixel images for tracking URLs.
+Image::Empty - Hassle-free 1x1 pixel empty GIFs for tracking URLs.
 
 =head1 VERSION
 
-Version 0.12
+Version 0.13
 
 =cut
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 $VERSION = eval $VERSION;
 
@@ -22,33 +22,13 @@ $VERSION = eval $VERSION;
 
 Create 1x1 pixel empty/transparent GIFs to use in tracking URLs without the hassle of actually creating and/or loading image data.
 
+Such a basic and common scenario deserves a basic solution.
+
  use Image::Empty;
  
- my $cgi = CGI->new;
- 
  my $gif = Image::Empty->gif;
  
- print $cgi->header( -type => $gif->type, -Content_length => $gif->length );
- 
- print $gif->content;
-
-Or a bit shorter...
-
- my $gif = Image::Empty->gif;
- 
- print $gif->render( CGI->new );
-
-Or, if you do not want the dependency on the C<CGI> module...
-
- my $gif = Image::Empty->gif;
- 
- print $gif->render;
- 
-Or, if you are working with Plack...
-
- my $gif = Image::Empty->gif;
- 
- return $gif->render( Plack::Response->new );
+ print $gif->render;   # HTTP headers and body content
 
 =cut
 
@@ -82,7 +62,7 @@ sub new
 
 =head3 gif
 
-Returns an instance representing an empty GIF for use in an HTTP response.
+Returns a C<new> instance representing an empty GIF for use in an HTTP response.
 
  my $gif = Image::Empty->gif;
 
@@ -104,13 +84,15 @@ sub gif
 
 =head3 render
 
-The C<render> method can be used as a shortcut to set the HTTP headers and body when responding with the empty GIF.
+The C<render> method can be used to set the HTTP headers and body when responding with the empty GIF.
+
+ $gif->render;
 
 A string is returned.
 
-Under a CGI environment this would generally be printed direct to C<STDOUT> (ie, the browser).
+Under a CGI environment this would generally be printed directly to C<STDOUT> (ie, the browser).
 
-Chaining the methods together can make the usage very compact.
+Chaining methods together can make the usage very compact.
 
  use Image::Empty;
  
@@ -118,32 +100,13 @@ Chaining the methods together can make the usage very compact.
 
 Remember that the C<render> method sets the HTTP headers for you, so you do not need to worry about this yourself.
 
-=head4 CGI
-
-If you already have an instance of the C<CGI> object in your code, you can pass this instance to the render method, to have it use the C<CGI-\>header> method.
-
-As above, a string is returned.
-
- print Image::Empty->gif->render( CGI->new );
-
-It is the same as doing...
-
- my $cgi = CGI->new;
- 
- my $gif = Image::Empty->gif;
- 
- print $cgi->header( -type                => $gif->type,
-                     -Content_length      => $gif->length,
-                     -Content_disposition => $gif->disposition . '; filename="' . $gif->filename . '"',
-                   );
- 
- print $gif->content;
-
 =head4 Plack
 
-If you are working with Plack, we support that too.
+If you are working with Plack, supply the L<Plack::Response> object to the C<render> method.
 
-The C<render> method in this scenario returns the C<finalized> L<Plack::Response> object, as a quick one-liner...
+The C<render> method in this scenario returns the C<finalized> L<Plack::Response> object.
+
+As a quick one-liner...
 
  my $app = sub {
 
@@ -175,12 +138,6 @@ It is the same as doing...
 sub render
 {
 	my ( $self, $handler ) = @_;
-	
-	if ( ref $handler eq 'CGI' )
-	{
-		return $handler->header( -type => $self->type, -Content_length => $self->length, -Content_disposition => $self->disposition . '; filename="' . $self->filename . '"' )
-		     . $self->content;
-	}
 
 	if ( ref $handler eq 'Plack::Response' )
 	{
