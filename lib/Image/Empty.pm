@@ -10,11 +10,11 @@ Image::Empty - Hassle-free empty/transparent 1x1 pixel images for tracking URLs.
 
 =head1 VERSION
 
-Version 0.09
+Version 0.10
 
 =cut
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 $VERSION = eval $VERSION;
 
@@ -133,7 +133,14 @@ It is the same as doing:
          my $gif = Image::Empty->gif;
  
          my $response = Plack::Response->new;
-         
+ 
+         $response->status(200);
+ 
+         $response->content_type( $gif->type );
+         $response->content_length( $gif->length );
+ 
+         $response->header( 'Content-disposition' => $gif->disposition . '; filename="' . $gif->filename . '"' );
+ 
          return $gif->render( $response );
  }
 
