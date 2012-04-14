@@ -10,32 +10,40 @@ Image::Empty - Hassle-free empty/transparent 1x1 pixel images for tracking URLs.
 
 =head1 VERSION
 
-Version 0.11
+Version 0.12
 
 =cut
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Create 1x1 pixel empty/transparent GIFs to use in tracking URLs without the hassle of actually creating and/or loading images.
+Create 1x1 pixel empty/transparent GIFs to use in tracking URLs without the hassle of actually creating and/or loading image data.
 
  use Image::Empty;
  
+ my $cgi = CGI->new;
+ 
  my $gif = Image::Empty->gif;
  
- print CGI->new->header( -type => $gif->type, -Content_length => $gif->length );
+ print $cgi->header( -type => $gif->type, -Content_length => $gif->length );
  
  print $gif->content;
 
-Or...
+Or a bit shorter...
 
  my $gif = Image::Empty->gif;
  
- $gif->render( CGI->new );
+ print $gif->render( CGI->new );
 
+Or, if you do not want the dependency on the C<CGI> module...
+
+ my $gif = Image::Empty->gif;
+ 
+ print $gif->render;
+ 
 Or, if you are working with Plack...
 
  my $gif = Image::Empty->gif;
@@ -50,7 +58,7 @@ Or, if you are working with Plack...
 
 =head3 new
 
-Returns an instance representing an empty image.
+Returns an instance representing an image.
 
  my $empty = Image::Empty->new;
 
@@ -74,7 +82,7 @@ sub new
 
 =head3 gif
 
-Returns an instance representing an empty GIF for use in responding to HTTP requests.
+Returns an instance representing an empty GIF for use in an HTTP response.
 
  my $gif = Image::Empty->gif;
 
@@ -96,30 +104,46 @@ sub gif
 
 =head3 render
 
+The C<render> method can be used as a shortcut to set the HTTP headers and body when responding with the empty GIF.
+
+A string is returned.
+
+Under a CGI environment this would generally be printed direct to C<STDOUT> (ie, the browser).
+
+Chaining the methods together can make the usage very compact.
+
+ use Image::Empty;
+ 
+ print Image::Empty->gif->render;
+
+Remember that the C<render> method sets the HTTP headers for you, so you do not need to worry about this yourself.
+
 =head4 CGI
 
-Supplying a C<CGI> object to the C<render> method will set the HTTP header and content.
+If you already have an instance of the C<CGI> object in your code, you can pass this instance to the render method, to have it use the C<CGI-\>header> method.
 
-A string is returned for you to print, you can condense this down to a single line by chaining methods.
+As above, a string is returned.
 
  print Image::Empty->gif->render( CGI->new );
 
 It is the same as doing...
 
+ my $cgi = CGI->new;
+ 
  my $gif = Image::Empty->gif;
  
- print CGI->new->header( -type                => $gif->type,
-                         -Content_length      => $gif->length,
-                         -Content_disposition => $gif->disposition . '; filename="' . $gif->filename . '"',
-                       );
+ print $cgi->header( -type                => $gif->type,
+                     -Content_length      => $gif->length,
+                     -Content_disposition => $gif->disposition . '; filename="' . $gif->filename . '"',
+                   );
  
  print $gif->content;
 
 =head4 Plack
 
-If you are working under Plack, we support that too.
+If you are working with Plack, we support that too.
 
-This scenario returns the C<finalize>d L<Plack::Response> object, as a quick one-liner...
+The C<render> method in this scenario returns the C<finalized> L<Plack::Response> object, as a quick one-liner...
 
  my $app = sub {
 
@@ -141,6 +165,8 @@ It is the same as doing...
  
          $response->header( 'Content-disposition' => $gif->disposition . '; filename="' . $gif->filename . '"' );
  
+         $response->body( $gif->content ); 
+ 
          return $response->finalize;
  }
 
@@ -149,8 +175,6 @@ It is the same as doing...
 sub render
 {
 	my ( $self, $handler ) = @_;
-
-	return '' unless $handler;
 	
 	if ( ref $handler eq 'CGI' )
 	{
@@ -172,7 +196,11 @@ sub render
 		return $handler->finalize;
 	}
 	
-	return '';
+	return 'Content-Type: ' . $self->type . "\n" .
+	       'Content-Length: ' . $self->length . "\n" .
+	       'Content-disposition: ' . $self->disposition . '; filename="' . $self->filename . '"' .
+	       "\n\n" .
+	       $self->content;
 }
 
 =head2 Attributes
@@ -253,6 +281,8 @@ sub content
 }
 
 =head1 TODO
+
+mod_perl support
 
 PNG support
 

@@ -22,3 +22,6 @@ Revision history for Image-Empty
 
 0.11    Fixed Plack example in POD
 
+0.12    Removed dependency on the CGI object in the render call
+
+
