@@ -10,17 +10,17 @@ Image::Empty - Hassle-free empty/transparent 1x1 pixel images for tracking URLs.
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Create 1x1 pixel empty/transparent GIFs to use in tracking URLs without the hassle of actually creating images.
+Create 1x1 pixel empty/transparent GIFs to use in tracking URLs without the hassle of actually creating and/or loading images.
 
  use Image::Empty;
  
@@ -104,7 +104,7 @@ A string is returned for you to print, you can condense this down to a single li
 
  print Image::Empty->gif->render( CGI->new );
 
-It is the same as doing:
+It is the same as doing...
 
  my $gif = Image::Empty->gif;
  
@@ -117,16 +117,16 @@ It is the same as doing:
 
 =head4 Plack
 
-If you are working under Plack, this module supports that too.
+If you are working under Plack, we support that too.
 
-This scenario returns the C<finalized> L<Plack::Response> object, as a quick one-liner...
+This scenario returns the C<finalize>d L<Plack::Response> object, as a quick one-liner...
 
  my $app = sub {
 
          return Image::Empty->gif->render( Plack::Response->new );
  }
 
-It is the same as doing:
+It is the same as doing...
 
  my $app = sub {
  
@@ -141,7 +141,7 @@ It is the same as doing:
  
          $response->header( 'Content-disposition' => $gif->disposition . '; filename="' . $gif->filename . '"' );
  
-         return $gif->render( $response );
+         return $response->finalize;
  }
 
 =cut
