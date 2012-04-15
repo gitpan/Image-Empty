@@ -6,21 +6,21 @@ use warnings;
 
 =head1 NAME
 
-Image::Empty - Hassle-free 1x1 transparent GIFs for tracking URLs.
+Image::Empty - HTTP response helper for 1x1 empty GIFs, used with tracking URLs.
 
 =head1 VERSION
 
-Version 0.14
+Version 0.15
 
 =cut
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Create 1x1 transparent GIFs to use in tracking URLs without the hassle of actually creating and/or loading image data.
+Create 1x1 empty GIFs to use in tracking URLs without the hassle of actually creating and/or loading image data.
 
 Such a basic and common scenario deserves a basic solution.
 
@@ -28,19 +28,13 @@ Such a basic and common scenario deserves a basic solution.
  
  my $gif = Image::Empty->gif;
  
- print $gif->render;   # HTTP headers and body content
+ print $gif->render;   # HTTP headers and body
 
 =cut
 
 =head1 METHODS
 
 =head2 Class Methods
-
-=head3 new
-
-Returns an instance representing an image.
-
- my $empty = Image::Empty->new;
 
 =cut
 
@@ -84,7 +78,7 @@ sub gif
 
 =head3 render
 
-The C<render> method is be used to set the HTTP headers and body.
+The C<render> method is used to set the HTTP headers and body.
 
  $gif->render;
 

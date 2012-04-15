@@ -28,4 +28,5 @@ Revision history for Image-Empty
 
 0.14    15 April 2012 - Tiny POD changes
 
+0.15    No more mention of new(), no-one should be using anyway
 
