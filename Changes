@@ -30,3 +30,5 @@ Revision history for Image-Empty
 
 0.15    No more mention of new(), no-one should be using anyway
 
+0.16    Fixed Disposition header label
+

@@ -10,11 +10,11 @@ Image::Empty - HTTP response helper for 1x1 empty GIFs, used with tracking URLs.
 
 =head1 VERSION
 
-Version 0.15
+Version 0.16
 
 =cut
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 $VERSION = eval $VERSION;
 
@@ -120,7 +120,7 @@ It is the same as doing...
          $response->content_type( $gif->type );
          $response->content_length( $gif->length );
  
-         $response->header( 'Content-disposition' => $gif->disposition . '; filename="' . $gif->filename . '"' );
+         $response->header( 'Content-Disposition' => $gif->disposition . '; filename="' . $gif->filename . '"' );
  
          $response->body( $gif->content ); 
  
@@ -149,7 +149,7 @@ sub render
 	
 	return 'Content-Type: ' . $self->type . "\n" .
 	       'Content-Length: ' . $self->length . "\n" .
-	       'Content-disposition: ' . $self->disposition . '; filename="' . $self->filename . '"' .
+	       'Content-Disposition: ' . $self->disposition . '; filename="' . $self->filename . '"' .
 	       "\n\n" .
 	       $self->content;
 }

@@ -23,7 +23,7 @@ my $output = $gif->render;
 
 my $static = 'Content-Type: ' . 'image/gif' . "\n" .
 	       'Content-Length: ' . 43 . "\n" .
-	       'Content-disposition: ' . 'inline' . '; filename="' . 'empty.gif' . '"' .
+	       'Content-Disposition: ' . 'inline' . '; filename="' . 'empty.gif' . '"' .
 	       "\n\n" . sprintf( "GIF89a\1\0\1\0%c\0\0%c%c%c\0\0\0%s,\0\0\0\0\1\0\1\0\0%c%c%c\1\0;", 144, 0, 0, 0, pack("U8", 33, 249, 4, 5, 16, 0, 0, 0), 2, 2, 4 );
 	       
 ok( $output eq $static, "rendered output looks good" );
