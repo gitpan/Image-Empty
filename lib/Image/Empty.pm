@@ -1,34 +1,37 @@
 package Image::Empty;
 
 use 5.006;
+
 use strict;
 use warnings;
 
+use MIME::Base64;
+
 =head1 NAME
 
-Image::Empty - HTTP response helper for 1x1 empty GIFs, used with tracking URLs.
+Image::Empty - HTTP response helper for 1x1 empty GIFs or PNGs, for building tracking URLs.
 
 =head1 VERSION
 
-Version 0.16
+Version 0.17
 
 =cut
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 $VERSION = eval $VERSION;
 
 =head1 SYNOPSIS
 
-Create 1x1 empty GIFs to use in tracking URLs without the hassle of actually creating and/or loading image data.
+Create 1x1 empty/transparent GIFs or PNGs to use in tracking URLs without the hassle of actually creating and/or loading image data.
 
 Such a basic and common scenario deserves a basic solution.
 
  use Image::Empty;
  
- my $gif = Image::Empty->gif;
+ my $gif = Image::Empty->gif;   # swap for png
  
- print $gif->render;   # HTTP headers and body
+ print $gif->render;            # HTTP headers and body
 
 =cut
 
@@ -56,7 +59,7 @@ sub new
 
 =head3 gif
 
-Returns a C<new> instance representing an empty GIF for use in an HTTP response.
+Returns an instance representing an empty GIF for use in an HTTP response.
 
  my $gif = Image::Empty->gif;
 
@@ -70,7 +73,30 @@ sub gif
 	                    length      => 43,
 	                    disposition => 'inline',
 	                    filename    => 'empty.gif',
-	                    content     => sprintf( "GIF89a\1\0\1\0%c\0\0%c%c%c\0\0\0%s,\0\0\0\0\1\0\1\0\0%c%c%c\1\0;", 144, 0, 0, 0, pack("U8", 33, 249, 4, 5, 16, 0, 0, 0), 2, 2, 4 ),
+	                    content     => decode_base64('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='),
+	                  );
+}
+
+
+=head3 png
+
+Returns an instance representing an empty PNG for use in an HTTP response.
+
+ my $png = Image::Empty->png;
+
+=cut
+
+sub png
+{
+	my ( $class, %args ) = @_;
+	
+	return $class->new( type        => 'image/png',
+	                    length      => 153,
+	                    disposition => 'inline',
+	                    filename    => 'empty.png',
+	                    content     => decode_base64('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAMAAAAoyzS7AAAABGdBTUEAAK/INwWK6QAAABl0RVh0
+U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAGUExURf///wAAAFXC034AAAABdFJOUwBA
+5thmAAAADElEQVR42mJgAAgwAAACAAFPbVnhAAAAAElFTkSuQmCC'),
 	                  );
 }
 
@@ -140,17 +166,17 @@ sub render
 		$handler->content_type(   $self->type   );
 		$handler->content_length( $self->length );
 	
-		$handler->header( 'Content-disposition' => $self->disposition . '; filename="' . $self->filename . '"' );
+		$handler->header( 'Content-Disposition' => $self->disposition . '; filename="' . $self->filename . '"' );
 
 		$handler->body( $self->content );
 		
 		return $handler->finalize;
 	}
 	
-	return 'Content-Type: ' . $self->type . "\n" .
-	       'Content-Length: ' . $self->length . "\n" .
+	return 'Content-Type: ' . $self->type . "\r\n" .
+	       'Content-Length: ' . $self->length . "\r\n" .
 	       'Content-Disposition: ' . $self->disposition . '; filename="' . $self->filename . '"' .
-	       "\n\n" .
+	       "\r\n\r\n" .
 	       $self->content;
 }
 
@@ -235,11 +261,6 @@ sub content
 
 mod_perl support
 
-PNG support
-
-Catalyst support
-
-
 =head1 AUTHOR
 
 Rob Brown, C<< <rob at intelcompute.com> >>
@@ -249,9 +270,6 @@ Rob Brown, C<< <rob at intelcompute.com> >>
 Please report any bugs or feature requests to C<bug-image-empty at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Image-Empty>.  I will be notified, and then you will
 automatically be notified of progress on your bug as I make changes.
-
-
-
 
 =head1 SUPPORT
 
@@ -282,11 +300,6 @@ L<http://search.cpan.org/dist/Image-Empty/>
 
 =back
 
-
-=head1 ACKNOWLEDGEMENTS
-
-I can not actually remember where the original line came from to produce the gif content.
-
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2012 Rob Brown.
@@ -297,7 +310,7 @@ by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
 
-
 =cut
 
 1;
+
