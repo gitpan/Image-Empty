@@ -1,5 +1,7 @@
 Revision history for Image-Empty
 
+0.18    Mention Catalyst view
+
 0.17    16 April 2012
         Carriage return with new line on prints in header
         PNG support and converted GIF to base64 encoding

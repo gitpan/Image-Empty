@@ -13,11 +13,11 @@ Image::Empty - HTTP response helper for 1x1 empty GIFs or PNGs, for building tra
 
 =head1 VERSION
 
-Version 0.17
+Version 0.18
 
 =cut
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 $VERSION = eval $VERSION;
 
@@ -179,6 +179,10 @@ sub render
 	       "\r\n\r\n" .
 	       $self->content;
 }
+
+=head4 Catalyst
+
+If you are working with Catalyst, see L<Catalyst::View::Image::Empty>.
 
 =head2 Attributes
 
