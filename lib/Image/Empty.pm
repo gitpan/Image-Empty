@@ -13,11 +13,11 @@ Image::Empty - HTTP response helper for 1x1 empty GIFs or PNGs, for building tra
 
 =head1 VERSION
 
-Version 0.18
+Version 0.19
 
 =cut
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 $VERSION = eval $VERSION;
 
@@ -59,7 +59,7 @@ sub new
 
 =head3 gif
 
-Returns an instance representing an empty GIF for use in an HTTP response.
+Returns an instance representing an empty GIF (43 bytes) for use in an HTTP response.
 
  my $gif = Image::Empty->gif;
 
@@ -80,7 +80,7 @@ sub gif
 
 =head3 png
 
-Returns an instance representing an empty PNG for use in an HTTP response.
+Returns an instance representing an empty PNG (67 bytes) for use in an HTTP response.
 
  my $png = Image::Empty->png;
 
@@ -91,12 +91,10 @@ sub png
 	my ( $class, %args ) = @_;
 	
 	return $class->new( type        => 'image/png',
-	                    length      => 153,
+	                    length      => 67,
 	                    disposition => 'inline',
 	                    filename    => 'empty.png',
-	                    content     => decode_base64('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAMAAAAoyzS7AAAABGdBTUEAAK/INwWK6QAAABl0RVh0
-U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAGUExURf///wAAAFXC034AAAABdFJOUwBA
-5thmAAAADElEQVR42mJgAAgwAAACAAFPbVnhAAAAAElFTkSuQmCC'),
+	                    content     => decode_base64('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=='),
 	                  );
 }
 
