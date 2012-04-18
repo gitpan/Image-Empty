@@ -21,10 +21,10 @@ ok( $png->filename eq 'empty.png', "filename" );
 
 my $output = $png->render;
 
-my $static = 'Content-Type: ' . 'image/png' . "\r\n" .
-	       'Content-Length: ' . 67 . "\r\n" .
-	       'Content-Disposition: ' . 'inline' . '; filename="' . 'empty.png' . '"' .
-	       "\r\n\r\n" . decode_base64('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==');
+my $static = 'Content-Type: ' . 'image/png' . "\015\012" .
+	       'Content-Length: ' . 67 . "\015\012" .
+	       'Content-Disposition: ' . 'inline' . '; filename="' . 'empty.png' . '"' . "\015\012" .
+	       "\015\012" . decode_base64('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==');
     
 ok( $output eq $static, "rendered output looks good" );
 

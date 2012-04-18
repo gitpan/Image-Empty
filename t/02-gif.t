@@ -21,10 +21,10 @@ ok( $gif->filename eq 'empty.gif', "filename" );
 
 my $output = $gif->render;
 
-my $static = 'Content-Type: ' . 'image/gif' . "\r\n" .
-	       'Content-Length: ' . 43 . "\r\n" .
-	       'Content-Disposition: ' . 'inline' . '; filename="' . 'empty.gif' . '"' .
-	       "\r\n\r\n" . decode_base64('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
+my $static = 'Content-Type: ' . 'image/gif' . "\015\012" .
+	       'Content-Length: ' . 43 . "\015\012" .
+	       'Content-Disposition: ' . 'inline' . '; filename="' . 'empty.gif' . '"' . "\015\012" . 
+	       "\015\012" . decode_base64('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==');
     
 ok( $output eq $static, "rendered output looks good" );
 

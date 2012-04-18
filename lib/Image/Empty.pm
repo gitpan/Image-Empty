@@ -13,11 +13,11 @@ Image::Empty - HTTP response helper for 1x1 empty GIFs or PNGs, for building tra
 
 =head1 VERSION
 
-Version 0.19
+Version 0.20
 
 =cut
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 $VERSION = eval $VERSION;
 
@@ -171,10 +171,10 @@ sub render
 		return $handler->finalize;
 	}
 	
-	return 'Content-Type: ' . $self->type . "\r\n" .
-	       'Content-Length: ' . $self->length . "\r\n" .
-	       'Content-Disposition: ' . $self->disposition . '; filename="' . $self->filename . '"' .
-	       "\r\n\r\n" .
+	return 'Content-Type: ' . $self->type . "\015\012" .
+	       'Content-Length: ' . $self->length . "\015\012" .
+	       'Content-Disposition: ' . $self->disposition . '; filename="' . $self->filename . '"' . "\015\012" .
+	       "\015\012" .
 	       $self->content;
 }
 
